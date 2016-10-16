@@ -119,7 +119,7 @@ public class HttpServletRequestWrapper implements HttpServletRequest {
 
     public HashMap<String, String[]> getParameters() {
         if (parameters == null) return EMPTY_MAP;
-        HashMap<String, String[]> map = new HashMap<String, String[]>(parameters.size() * 2);
+        HashMap<String, String[]> map = new LinkedHashMap<String, String[]>(parameters.size() * 2);
         for (String key : parameters.keySet()) {
             map.put(key, parameters.get(key).clone());
         }
@@ -130,7 +130,8 @@ public class HttpServletRequestWrapper implements HttpServletRequest {
         if (parameters != null)
             return; //already parsed
 
-        HashMap<String, List<String>> mapA = new HashMap<String, List<String>>();
+        // [VM] LinkedHashMap preserves order
+        HashMap<String, List<String>> mapA = new LinkedHashMap<String, List<String>>();
         List<String> list;
 
         Map<String, List<String>> query = HTTPRequestUtils.getInstance().getQueryParams();
@@ -212,7 +213,8 @@ public class HttpServletRequestWrapper implements HttpServletRequest {
             }
         }
 
-        HashMap<String, String[]> map = new HashMap<String, String[]>(mapA.size() * 2);
+        // [VM] LinkedHashMap preserves order
+        HashMap<String, String[]> map = new LinkedHashMap<String, String[]>(mapA.size() * 2);
         for (String key : mapA.keySet()) {
             list = mapA.get(key);
             map.put(key, list.toArray(new String[list.size()]));
